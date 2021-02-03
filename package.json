@@ -3,7 +3,7 @@
   "version": "",
   "description": "CSS Named Colours Picker",
   "scripts": {
-    "serve": "webpack serve --mode=development"
+    "watch": "webpack --mode=development --watch"
   },
   "keywords": [],
   "author": "Beng Tan",
@@ -19,7 +19,6 @@
     "ts-loader": "^8.0.14",
     "typescript": "^4.1.3",
     "webpack": "^5.19.0",
-    "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-cli": "^4.4.0"
   }
 }
