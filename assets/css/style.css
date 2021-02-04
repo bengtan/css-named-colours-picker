@@ -15,3 +15,6 @@ td.column-hex { text-transform: uppercase; }
 .number-range-filter-widget input { width: 2em; }
 .number-range-filter-widget input:first-of-type { margin-right: 0.5em; }
 .number-range-filter-widget input:last-of-type { margin-left: 0.5em; }
+
+td button.copy { padding: 2px; margin-left: 0.25em; border-width: 1px; border-radius: 5px; }
+td button.copy svg { height: 1em; opacity: 0.67; }
