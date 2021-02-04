@@ -3,7 +3,8 @@
   "version": "",
   "description": "CSS Named Colours Picker",
   "scripts": {
-    "watch": "webpack --mode=development --watch"
+    "watch": "webpack --mode=development --watch",
+    "release": "rm -rf dist && webpack --mode=production"
   },
   "keywords": [],
   "author": "Beng Tan",
