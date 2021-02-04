@@ -288,16 +288,16 @@ export default function App() {
     const tableAny: any = table     // typecast
 
     const presetsPane = <div className="presets">
-        {Presets.map(preset => {
+        {Presets.map((preset, index) => {
             if (preset.label == 'br') {
-                return <br />
+                return <br key={index} />
             }
             else if (preset.label == 'nbsp') {
-                return <>&nbsp;&nbsp;</>
+                return <span key={index}>&nbsp;&nbsp;</span>
             }
 
-            return <button onClick={() => {
-                // Remove all filters first?
+            return <button key={index} onClick={() => {
+                // Remove all filters first
                 tableAny.setAllFilters([])
 
                 preset.filters!.forEach(item => {
