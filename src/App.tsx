@@ -16,7 +16,7 @@ type Colour = {
     l?: number
 }
 
-const colours0: Colour[] = [
+const Colours0: Colour[] = [
     { label: 'aliceblue', hex: 'f0f8ff' },
     { label: 'antiquewhite', hex: 'faebd7' },
     { label: 'aqua', hex: '00ffff' },
@@ -217,19 +217,49 @@ function rgb2hsl(rgb: {r: number, g: number, b: number}): {h: number, s: number,
 }
 
 function augmentColours() {
-    for (let c of colours0) {
+    for (let c of Colours0) {
         // Integers from 0 to 255
         c.r = parseInt(c.hex.substring(0, 2), 16)
         c.g = parseInt(c.hex.substring(2, 4), 16)
         c.b = parseInt(c.hex.substring(4, 6), 16)
         Object.assign(c, rgb2hsl(c as any))
     }
+    return Colours0
 }
+
+type Preset = {
+    label: string
+    filters?: {id: string, value: (Number | undefined)[]}[],
+    sort?: {id: string, desc?: boolean}[]
+}
+
+const Presets: Preset[] = [
+    { label: 'Red', filters: [{id: 'h', value: [320, 29]}, {id: 's', value: [5]}] },
+    { label: 'Orange', filters: [{id: 'h', value: [9, 51]}] },
+    { label: 'Yellow', filters: [{id: 'h', value: [40, 79]}] },
+    { label: 'Green', filters: [{id: 'h', value: [60, 160]}] },
+    { label: 'Cyan', filters: [{id: 'h', value: [160, 208]}] },
+    { label: 'Blue', filters: [{id: 'h', value: [180, 250]}] },
+    { label: 'Purple', filters: [{id: 'h', value: [241, 340]}] },
+    { label: 'Pink', filters: [{id: 'h', value: [300, 359]}] },
+    { label: 'br' },
+
+    { label: 'White-ish', filters: [{id: 'l', value: [90]}], sort: [{id: 'l', desc: true}] },
+    { label: 'Grey / Black', filters: [{id: 'h', value: [undefined, 10]}, {id: 's', value: [undefined, 10]}], sort: [{id: 'l'}] },
+    { label: 'Brown-ish', filters: [{id: 'h', value: [undefined, 55]}, {id: 's', value: [5]}] },
+
+    { label: 'nbsp' },
+    { label: 'Light', filters: [{id: 'l', value: [71]}], sort: [{id: 'l', desc: true}] },
+    { label: 'Medium', filters: [{id: 'l', value: [30, 71]}], sort: [{id: 'l', desc: true}] },
+    { label: 'Dark', filters: [{id: 'l', value: [undefined, 42]}], sort: [{id: 'l'}] },
+
+    { label: 'br' },
+    { label: 'Clear all filters', filters: [], sort: [] },
+]
 
 export default function App() {
     const data = React.useMemo(() => {
-        augmentColours()
-        return colours0
+        return augmentColours()
     }, [])
     const columns = React.useMemo(() => [
         { Header: 'Name', accessor: 'label', Filter: TextFilterWidget },
@@ -255,14 +285,38 @@ export default function App() {
             sortBy: [{id: 'label'}]
         }
     } as any, useFilters, useSortBy)
+    const tableAny: any = table     // typecast
 
-    return <table {...table.getTableProps()}>
+    const presetsPane = <div className="presets">
+        {Presets.map(preset => {
+            if (preset.label == 'br') {
+                return <br />
+            }
+            else if (preset.label == 'nbsp') {
+                return <>&nbsp;&nbsp;</>
+            }
+
+            return <button onClick={() => {
+                // Remove all filters first?
+                tableAny.setAllFilters([])
+
+                preset.filters!.forEach(item => {
+                    tableAny.setFilter(item.id, item.value)
+                })
+                if (preset.sort) {
+                    tableAny.setSortBy(preset.sort)
+                }
+            }}>{preset.label}</button>
+        })}
+    </div>
+
+    const tablePane = <table {...table.getTableProps()}>
         <thead>
         {table.headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
                 <th className={`column-${column.id}`} {...column.getHeaderProps()}>
-                    <div {...(column as any).getSortByToggleProps()}>
+                    <div {...(column as any).getSortByToggleProps()} title="To sort by multiple columns, hold SHIFT and click">
                         <span className="heading">
                             {column.render('Header')}
                         </span>
@@ -295,6 +349,11 @@ export default function App() {
         })}
         </tbody>
     </table>
+
+    return <>
+        {presetsPane}
+        {tablePane}
+    </>
 }
 
 function TextFilterWidget({column: { filterValue, setFilter }}: any) {
