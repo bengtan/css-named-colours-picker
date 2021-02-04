@@ -1,4 +1,4 @@
-table { margin: 1em; border-spacing: 0; border-bottom: 1px solid grey; }
+table { margin: 1em 0; border-spacing: 0; border-bottom: 1px solid grey; }
 
 th, td { padding: 0.25em; }
 th { border: 1px solid black; border-width: 2px 0 2px 1px; }
