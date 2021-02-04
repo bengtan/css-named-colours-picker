@@ -3,7 +3,7 @@
  */
 
 import * as React from 'react'
-import { Row, Column, useTable, useFilters, useSortBy, usePagination } from 'react-table'
+import { Row, useTable, useFilters, useSortBy } from 'react-table'
 
 type Colour = {
     label: string
@@ -226,31 +226,35 @@ function augmentColours() {
     }
 }
 
-function renderColour(data: any) {
-    return <div className="rendered-colour" style={{backgroundColor: `#${data.row.original.hex}`}}>&nbsp;</div>
-}
-
 export default function App() {
     const data = React.useMemo(() => {
         augmentColours()
         return colours0
     }, [])
     const columns = React.useMemo(() => [
-        { Header: 'Name', accessor: 'label' },
-        { Header: 'Colour', id: 'colour', Cell: renderColour },
-        { Header: 'RGB', accessor: 'hex' },
-        { Header: 'R', accessor: 'r' },
-        { Header: 'G', accessor: 'g' },
-        { Header: 'B', accessor: 'b' },
-        { Header: 'H', accessor: 'h' },
-        { Header: 'S', accessor: 's' },
-        { Header: 'L', accessor: 'l' },
+        { Header: 'Name', accessor: 'label', Filter: TextFilterWidget },
+        { Header: 'Colour', id: 'colour', disableFilters: true, disableSortBy: true, Cell: renderColour },
+        { Header: 'RGB', accessor: 'hex', disableFilters: true, disableSortBy: true },
+        { Header: 'R', accessor: 'r', disableFilters: true },
+        { Header: 'G', accessor: 'g', disableFilters: true },
+        { Header: 'B', accessor: 'b', disableFilters: true },
+        { Header: 'H', accessor: 'h', Filter: NumberRangeFilterWidget, filter: 'circular-range' },
+        { Header: 'S', accessor: 's', Filter: NumberRangeFilterWidget, filter: 'range' },
+        { Header: 'L', accessor: 'l', Filter: NumberRangeFilterWidget, filter: 'range' },
     ], [])
 
     const table = useTable({
         columns,
         data,
-    } as any, /*useFilters,*/ useSortBy)
+        filterTypes: {
+            'range': numberRangeFilter,
+            'circular-range': numberCircularRangeFilter,
+        },
+        disableSortRemove: true,
+        initialState: {
+            sortBy: [{id: 'label'}]
+        }
+    } as any, useFilters, useSortBy)
 
     return <table {...table.getTableProps()}>
         <thead>
@@ -291,4 +295,87 @@ export default function App() {
         })}
         </tbody>
     </table>
+}
+
+function TextFilterWidget({column: { filterValue, setFilter }}: any) {
+    return (
+        <input
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+            }}
+            placeholder='Filter ...'
+        />
+    )
+}
+
+function NumberRangeFilterWidget({column: { filterValue = [], setFilter }}: any) {  
+    return <div className="number-range-filter-widget">
+        <input
+            value={filterValue[0] || ''}
+            onChange={e => {
+                const val = e.target.value
+                setFilter((old = []) => [val ? parseInt(val, 10) : undefined, old[1]])
+            }}
+        />
+        to
+        <input
+            value={filterValue[1] || ''}
+            onChange={e => {
+                const val = e.target.value
+                setFilter((old = []) => [old[0], val ? parseInt(val, 10) : undefined])
+            }}
+        />
+    </div>
+}
+
+function numberRangeFilter(rows: Array<Row>, ids: Array<String>, filterValue: Array<Number | undefined>) {
+    if (filterValue[0] === undefined && filterValue[1] === undefined) {
+        return rows
+    }
+
+    const min = filterValue[0] === undefined ? Number.MIN_SAFE_INTEGER : filterValue[0]
+    const max = filterValue[1] === undefined ? Number.MAX_SAFE_INTEGER : filterValue[1]
+
+    ids.forEach((key: any) => {
+        rows = rows.filter(row => {
+            const value = row.values[key]
+            return value >= min && value <= max
+        })
+    })
+
+    return rows
+}
+
+function numberCircularRangeFilter(rows: Array<Row>, ids: Array<String>, filterValue: Array<Number | undefined>) {
+    if (filterValue[0] === undefined && filterValue[1] === undefined) {
+        return rows
+    }
+
+    const min = filterValue[0] === undefined ? Number.MIN_SAFE_INTEGER : filterValue[0]
+    const max = filterValue[1] === undefined ? Number.MAX_SAFE_INTEGER : filterValue[1]
+
+    if (min <= max) {
+        ids.forEach((key: any) => {
+            rows = rows.filter(row => {
+                const value = row.values[key]
+                return value >= min && value <= max
+            })
+        })
+    }
+    else {
+        // circular
+        ids.forEach((key: any) => {
+            rows = rows.filter(row => {
+                const value = row.values[key]
+                return value >= min || value <= max
+            })
+        })
+    }
+
+    return rows
+}
+
+function renderColour(data: any) {
+    return <div className="rendered-colour" style={{backgroundColor: `#${data.row.original.hex}`}}>&nbsp;</div>
 }
