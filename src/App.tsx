@@ -263,7 +263,11 @@ const Presets: Preset[] = [
     { label: 'Reset table', filters: [], sort: [], className: 'reset-table' },
 ]
 
+let otherColour: string = ''
+let reverseColour: boolean = false
+
 export default function App() {
+    const [nonce, setNonce] = React.useState<number>(0)
     const data = React.useMemo(() => {
         return augmentColours()
     }, [])
@@ -293,6 +297,33 @@ export default function App() {
     } as any, useFilters, useSortBy)
     const tableAny: any = table     // typecast
 
+    function triggerRender() {
+        setNonce(nonce + 1)
+    }
+
+    function onOtherColourChange(event: any) {
+        const text = event.target.value
+        if (text) {
+            const match = text.match(/[0-9a-fA-F]{6}/)
+            if (Array.isArray(match) && match.length > 0 && otherColour != match[0]) {
+                otherColour = match[0]
+                triggerRender()
+            }
+        }
+        else if (otherColour) {
+            otherColour = ''
+            triggerRender()
+        }
+    }
+
+    function onReverseColourChange(event: any) {
+        const value = event.target.checked
+        if (reverseColour != value) {
+            reverseColour = value
+            triggerRender()
+        }
+    }
+
     const presetsPane = <div className="presets">
         {Presets.map((preset, index) => {
             if (preset.label == 'br') {
@@ -314,6 +345,15 @@ export default function App() {
                 }
             }}>{preset.label}</button>
         })}
+    </div>
+
+    const otherColourPane = <div className="other-colour-pane">
+        <label htmlFor="other-colour">Compare against colour:</label>
+        &nbsp;
+        <input name="other-colour" className="other-colour" placeholder="rrggbb" onChange={onOtherColourChange} />
+        &nbsp;
+        <input name="reverse-colour" type="checkbox" onChange={onReverseColourChange} />
+        <label htmlFor="reverse-colour">reverse video</label>
     </div>
 
     const tablePane = <table {...table.getTableProps()}>
@@ -358,6 +398,7 @@ export default function App() {
 
     return <>
         {presetsPane}
+        {otherColourPane}
         {tablePane}
     </>
 }
@@ -442,7 +483,23 @@ function numberCircularRangeFilter(rows: Array<Row>, ids: Array<String>, filterV
 }
 
 function renderColour(data: any) {
-    return <div className="rendered-colour" style={{backgroundColor: `#${data.row.original.hex}`}}>&nbsp;</div>
+    const style: React.CSSProperties = {
+        backgroundColor: `#${data.row.original.hex}`
+    }
+
+    if (otherColour) {
+        if (reverseColour) {
+            style.backgroundColor = `#${otherColour}`
+            style.color = `#${data.row.original.hex}`
+        }
+        else {
+            style.color = `#${otherColour}`
+        }
+    }
+
+    return <div className="rendered-colour" style={style}>
+        {otherColour ? 'Colour' : <>&nbsp;</>}
+    </div>
 }
 
 function copyToClipboard(text: string) {

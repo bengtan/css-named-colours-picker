@@ -13,7 +13,7 @@ th.column-label, td.column-label { border-left-width: 0; text-align: left; }
 .column-label input { width: 10em; }
 
 .column-h, .column-r { border-left: 2px solid black; }
-.rendered-colour { height: 1.5em; }
+.rendered-colour { padding: 0.5em 1em; text-align: center; }
 
 .column-hex { text-transform: uppercase; }
 
