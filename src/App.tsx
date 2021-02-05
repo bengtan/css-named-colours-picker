@@ -248,12 +248,12 @@ const Presets: Preset[] = [
     { label: 'Grey / Black', filters: [{id: 'h', value: [undefined, 10]}, {id: 's', value: [undefined, 10]}], sort: [{id: 'l'}] },
     { label: 'Brown-ish', filters: [{id: 'h', value: [undefined, 55]}, {id: 's', value: [5]}] },
 
-    { label: 'nbsp' },
+    { label: 'spacer' },
     { label: 'Light', filters: [{id: 'l', value: [71]}], sort: [{id: 'l', desc: true}] },
     { label: 'Medium', filters: [{id: 'l', value: [30, 71]}], sort: [{id: 'l', desc: true}] },
     { label: 'Dark', filters: [{id: 'l', value: [undefined, 42]}], sort: [{id: 'l'}] },
 
-    { label: 'br' },
+    { label: 'spacer' },
     { label: 'Clear all filters', filters: [], sort: [] },
 ]
 
@@ -290,10 +290,10 @@ export default function App() {
     const presetsPane = <div className="presets">
         {Presets.map((preset, index) => {
             if (preset.label == 'br') {
-                return <br key={index} />
+                return <span key={index} className="newline"></span>
             }
-            else if (preset.label == 'nbsp') {
-                return <span key={index}>&nbsp;&nbsp;</span>
+            else if (preset.label == 'spacer') {
+                return <span key={index} className="spacer"></span>
             }
 
             return <button key={index} onClick={() => {
@@ -463,7 +463,7 @@ function ClipboardIcon() {
 function renderWithCopyButton(data: any) {
     return <>
         <span>{data.cell.value}</span>
-        <button key={data.row.id} className="copy" title="copy to clipboard" onClick={() => {
+        <button key={data.row.id} title="copy to clipboard" onClick={() => {
             copyToClipboard(data.cell.value)
         }}>
             <ClipboardIcon />

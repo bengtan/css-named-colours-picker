@@ -1,4 +1,6 @@
-.presets button { margin-bottom: 0.5em; }
+.presets button { margin-bottom: 0.5em; margin-right: 0.25em; }
+.newline:after { display: block; content: ''; }
+.spacer:after { display: inline-block; content: ' '; width: 1em; }
 
 table { margin: 1em 0; border-spacing: 0; border-bottom: 1px solid grey; }
 
@@ -7,14 +9,16 @@ th { border: 1px solid black; border-width: 2px 0 2px 1px; }
 td { border: 1px solid grey; border-width: 0 0 1px 1px; text-align: right; }
 th.column-label, td.column-label { border-left-width: 0; text-align: left; }
 
-th.column-h, td.column-h, th.column-r, td.column-r { border-left: 2px solid black; }
-.rendered-colour { height: 2em; }
+.column-label input { width: 10em; }
 
-td.column-hex { text-transform: uppercase; }
+.column-h, .column-r { border-left: 2px solid black; }
+.rendered-colour { height: 1.5em; }
+
+.column-hex { text-transform: uppercase; }
 
 .number-range-filter-widget input { width: 2em; }
 .number-range-filter-widget input:first-of-type { margin-right: 0.5em; }
 .number-range-filter-widget input:last-of-type { margin-left: 0.5em; }
 
-td button.copy { padding: 2px; margin-left: 0.25em; border-width: 1px; border-radius: 5px; }
-td button.copy svg { height: 1em; opacity: 0.67; }
+td button { padding: 2px; margin-left: 0.25em; border-width: 1px; border-radius: 5px; }
+td button svg { height: 1em; opacity: 0.67; }
