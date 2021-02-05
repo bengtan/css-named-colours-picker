@@ -4,6 +4,8 @@ A list of CSS named colours in a filterable, (multi-column) sortable table. Impl
 
 Useful for choosing colours for web development.
 
+Demo: https://bengtan.com/css-named-colours-picker/
+
 ## Build
 
 * Install nodejs and yarn
