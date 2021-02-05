@@ -348,7 +348,7 @@ export default function App() {
     </div>
 
     const otherColourPane = <div className="other-colour-pane">
-        <label htmlFor="other-colour">Compare against colour:</label>
+        <label htmlFor="other-colour">Text colour:</label>
         &nbsp;
         <input name="other-colour" className="other-colour" placeholder="rrggbb" onChange={onOtherColourChange} />
         &nbsp;

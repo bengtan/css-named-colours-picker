@@ -3,6 +3,8 @@
 .spacer:after { display: inline-block; content: ' '; width: 1em; }
 .reset-table { font-weight: bold; }
 
+.other-colour { width: 5em; }
+
 table { margin: 1em 0; border-spacing: 0; border-bottom: 1px solid grey; }
 
 th, td { padding: 0.25em; }
