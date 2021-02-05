@@ -229,7 +229,7 @@ function augmentColours() {
 
 type Preset = {
     label: string
-    filters?: {id: string, value: (Number | undefined)[]}[],
+    filters?: {id: string, value: string | (Number | undefined)[]}[],
     sort?: {id: string, desc?: boolean}[]
 }
 
@@ -252,6 +252,11 @@ const Presets: Preset[] = [
     { label: 'Light', filters: [{id: 'l', value: [71]}], sort: [{id: 'l', desc: true}] },
     { label: 'Medium', filters: [{id: 'l', value: [30, 71]}], sort: [{id: 'l', desc: true}] },
     { label: 'Dark', filters: [{id: 'l', value: [undefined, 42]}], sort: [{id: 'l'}] },
+
+    { label: 'br' },
+    { label: 'Light (name)', filters: [{id: 'label', value: 'light' }] },
+    { label: 'Medium (name)', filters: [{id: 'label', value: 'medium'}] },
+    { label: 'Dark (name)', filters: [{id: 'label', value: 'dark'}] },
 
     { label: 'spacer' },
     { label: 'Clear all filters', filters: [], sort: [] },
