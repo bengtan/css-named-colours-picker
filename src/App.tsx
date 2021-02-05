@@ -229,8 +229,9 @@ function augmentColours() {
 
 type Preset = {
     label: string
-    filters?: {id: string, value: string | (Number | undefined)[]}[],
+    filters?: {id: string, value: string | (Number | undefined)[]}[]
     sort?: {id: string, desc?: boolean}[]
+    className?: string
 }
 
 const Presets: Preset[] = [
@@ -259,7 +260,7 @@ const Presets: Preset[] = [
     { label: 'Dark (name)', filters: [{id: 'label', value: 'dark'}] },
 
     { label: 'spacer' },
-    { label: 'Clear all filters', filters: [], sort: [] },
+    { label: 'Reset table', filters: [], sort: [], className: 'reset-table' },
 ]
 
 export default function App() {
@@ -301,7 +302,7 @@ export default function App() {
                 return <span key={index} className="spacer"></span>
             }
 
-            return <button key={index} onClick={() => {
+            return <button key={index} className={preset.className} onClick={() => {
                 // Remove all filters first
                 tableAny.setAllFilters([])
 

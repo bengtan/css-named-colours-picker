@@ -1,6 +1,7 @@
 .presets button { margin-bottom: 0.5em; margin-right: 0.25em; }
 .newline:after { display: block; content: ''; }
 .spacer:after { display: inline-block; content: ' '; width: 1em; }
+.reset-table { font-weight: bold; }
 
 table { margin: 1em 0; border-spacing: 0; border-bottom: 1px solid grey; }
 
