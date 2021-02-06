@@ -10,6 +10,10 @@ Demo: https://bengtan.com/css-named-colours-picker/
 
 ![css-named-colours-picker-screenshot](https://user-images.githubusercontent.com/1025481/107120502-edf5f800-68c8-11eb-99d3-f6884929c6e1.png)
 
+## Video
+
+https://user-images.githubusercontent.com/1025481/107121164-f0a61c80-68cb-11eb-9dbb-0dd22f42e0ae.mp4
+
 ## Build
 
 * Install nodejs and yarn
