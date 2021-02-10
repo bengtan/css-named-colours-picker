@@ -1,6 +1,6 @@
 # CSS Named Colours Picker
 
-Interactive list of CSS named/extended colours in a filterable, sortable table. Implemented as a javascript widget.
+Interactive tool for exploring and selecting CSS named/extended colours. Implemented as a filterable (multi-column) sortable table widget.
 
 Useful for choosing colours for web development.
 
